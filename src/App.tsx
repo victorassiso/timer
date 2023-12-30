@@ -1,7 +1,11 @@
+import { BrowserRouter } from 'react-router-dom'
+
+import { Router } from './router'
+
 export function App() {
   return (
-    <div className="">
-      <h1>Hello World!</h1>
-    </div>
+    <BrowserRouter basename="/timer">
+      <Router />
+    </BrowserRouter>
   )
 }
