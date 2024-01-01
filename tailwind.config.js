@@ -25,6 +25,7 @@ export default {
           600: 'var(--base-600)',
           700: 'var(--base-700)',
           800: 'var(--base-800)',
+          900: 'var(--base-900)',
         },
         yellow: {
           500: 'var(--yellow-500)',
