@@ -6,12 +6,6 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    font-family: 'Roboto', sans-serif
-  }
-}
-
-@layer base {
   :root {
     --yellow-500: #FBA94C;
 
@@ -31,5 +25,28 @@
     --base-700: #29292E;
     --base-800: #202024;
     --base-900: #121214;
+  }
+}
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    background: #121214;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus {
+    outline: 0;
+    box-shadow: 0 0 0 2px #323238
+  }
+  input::-webkit-calendar-picker-indicator {
+    display: none !important;
   }
 }

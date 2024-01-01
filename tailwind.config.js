@@ -3,6 +3,9 @@ export default {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      screens: {
+        lg2: '1056px',
+      },
       colors: {
         primary: {
           DEFAULT: 'var(--primary)',
@@ -29,7 +32,7 @@ export default {
       },
     },
     fontFamily: {
-      mono: ['Roboto Mono'],
+      mono: ['Roboto Mono', 'monospace'],
     },
   },
   plugins: [],
