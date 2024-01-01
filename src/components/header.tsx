@@ -4,10 +4,8 @@ import logo from '../assets/logo.svg'
 
 export function Header() {
   return (
-    <div className="flex h-12 items-center justify-between px-5">
-      <div className="">
-        <img src={logo} alt="" className="" />
-      </div>
+    <div className="flex h-12 items-end justify-between px-8">
+      <img src={logo} alt="" className="h-10 w-10" />
       <div className="flex gap-2">
         <a
           href=""
