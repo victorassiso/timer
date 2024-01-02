@@ -4,6 +4,7 @@ interface StatusProps {
 
 export function Status({ status }: StatusProps) {
   let color, text
+
   switch (status) {
     case 'completed':
       color = 'green-500'

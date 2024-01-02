@@ -4,7 +4,7 @@ import { HandPalm, Play } from 'phosphor-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { CountDownCharacter } from '../components/count-down-character'
+import { CountDownCharacter } from './components/count-down-character'
 import {
   buttonBaseStyles,
   Cycle,

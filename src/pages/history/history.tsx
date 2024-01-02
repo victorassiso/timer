@@ -1,4 +1,4 @@
-import { Status } from '../components/status'
+import { Status } from './components/status'
 
 export function History() {
   const thStyle =
