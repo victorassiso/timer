@@ -1,9 +1,11 @@
 import { Play } from 'phosphor-react'
 
 import { CountDownCharacter } from '../components/count-down-character'
-import { TaskInput } from '../components/task-input'
 
 export function Home() {
+  const inputBaseStyles =
+    'h-10 border-0 border-b-2 bg-transparent px-2 text-lg font-bold text-base-200 placeholder:text-base-500 focus:border-primary focus:shadow-none '
+
   return (
     // Main Container
     // <div className="flex flex-1 flex-col items-center justify-center px-5">
@@ -17,9 +19,9 @@ export function Home() {
         {/* <div className="flex w-full flex-wrap items-center justify-center gap-2 text-lg font-bold text-base-200"> */}
         <div className="flex w-full max-w-screen-sm flex-wrap items-center justify-center gap-2 font-bold text-base-200">
           <label htmlFor="task">Vou trabalhar em</label>
-          <TaskInput
+          <input
             id="task"
-            style="grow"
+            className={inputBaseStyles + 'grow'}
             type="text"
             placeholder="Dê um nome para o seu projeto"
             list="task-suggestions"
@@ -32,12 +34,13 @@ export function Home() {
           </datalist>
 
           <label htmlFor="minutesAmount">durante</label>
-          <TaskInput
+          <input
             id="minutesAmount"
             type="number"
-            style="w-16"
+            className={inputBaseStyles + 'w-16'}
             placeholder="00"
             step={5}
+            min={5}
           />
 
           <span>minutos.</span>
@@ -59,7 +62,8 @@ export function Home() {
 
         <button
           type="submit"
-          className="flex w-full  cursor-pointer items-center justify-center gap-2 rounded-lg border-0 bg-primary p-4 font-bold text-base-200 duration-300 enabled:hover:bg-primary-dark disabled:opacity-[0.7]"
+          disabled
+          className="flex w-full items-center justify-center gap-2 rounded-lg border-0 bg-primary p-4 font-bold text-base-200 duration-300 enabled:hover:bg-primary-dark disabled:opacity-[0.7]"
         >
           <Play />
           Começar
