@@ -3,15 +3,33 @@ import { differenceInSeconds } from 'date-fns'
 import { HandPalm, Play } from 'phosphor-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import * as zod from 'zod'
 
 import { CountDownCharacter } from './components/count-down-character'
-import {
-  buttonBaseStyles,
-  Cycle,
-  inputBaseStyles,
-  NewCycleFormData,
-  newCycleFormValidationSchema,
-} from './home-aux'
+
+const newCycleFormValidationSchema = zod.object({
+  task: zod.string().min(1, 'Informe a tarefa'),
+  minutesAmount: zod
+    .number()
+    .min(5, 'O ciclo precisa ser de no mínimo 5 minutos')
+    .max(60, 'O ciclo precisa ser de no máximo 60 minutos'),
+})
+
+type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
+
+interface Cycle {
+  id: string
+  task: string
+  minutesAmount: number
+  startDate: Date
+  interruptedDate?: Date
+}
+
+const inputBaseStyles =
+  'h-10 border-0 border-b-2 bg-transparent px-2 text-lg font-bold text-base-200 placeholder:text-base-500 focus:border-primary focus:shadow-none '
+
+const buttonBaseStyles =
+  'flex w-full items-center justify-center gap-2 rounded-lg border-0 p-4 font-bold text-base-200 duration-300 disabled:opacity-[0.7]'
 
 export function Home() {
   const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
