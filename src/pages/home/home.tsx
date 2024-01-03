@@ -1,111 +1,43 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { differenceInSeconds } from 'date-fns'
-import { HandPalm, Play } from 'phosphor-react'
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useContext } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
 import * as zod from 'zod'
 
-import { CountDownCharacter } from './components/count-down-character'
+import { CyclesContext } from '../../contexts/cycle-context'
+import { Button } from './components/button/button'
+import { Display } from './components/display/display'
+import { FormInputs } from './components/form-inputs/form-inputs'
 
 const newCycleFormValidationSchema = zod.object({
   task: zod.string().min(1, 'Informe a tarefa'),
   minutesAmount: zod
     .number()
-    .min(5, 'O ciclo precisa ser de no mínimo 5 minutos')
-    .max(60, 'O ciclo precisa ser de no máximo 60 minutos'),
+    .min(5, 'O ciclo precisa ser de no mínimo 5 minutos.')
+    .max(60, 'O ciclo precisa ser de no máximo 60 minutos.'),
 })
 
 type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
 
-interface Cycle {
-  id: string
-  task: string
-  minutesAmount: number
-  startDate: Date
-  interruptedDate?: Date
-}
-
-const inputBaseStyles =
-  'h-10 border-0 border-b-2 bg-transparent px-2 text-lg font-bold text-base-200 placeholder:text-base-500 focus:border-primary focus:shadow-none '
-
-const buttonBaseStyles =
-  'flex w-full items-center justify-center gap-2 rounded-lg border-0 p-4 font-bold text-base-200 duration-300 disabled:opacity-[0.7]'
-
 export function Home() {
-  const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
+  const { createNewCycle } = useContext(CyclesContext)
+
+  const newCycleForm = useForm<NewCycleFormData>({
     resolver: zodResolver(newCycleFormValidationSchema),
     defaultValues: {
       task: '',
       minutesAmount: undefined,
     },
   })
-  const [cycles, setCycles] = useState<Cycle[]>([])
-  const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
-  const [secondsPassedAmount, setSecondsPassedAmount] = useState<number>(0)
-  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
-
-  useEffect(() => {
-    let interval: number
-
-    if (activeCycle) {
-      interval = setInterval(() => {
-        setSecondsPassedAmount(
-          differenceInSeconds(new Date(), activeCycle.startDate),
-        )
-      }, 1000)
-    }
-    return () => {
-      clearInterval(interval)
-    }
-  }, [activeCycle])
+  const { handleSubmit, watch, reset } = newCycleForm
 
   function handleCreateNewCycle(data: NewCycleFormData) {
-    const id = String(new Date().getTime())
-
-    const newCycle: Cycle = {
-      id,
-      task: data.task,
-      minutesAmount: data.minutesAmount,
-      startDate: new Date(),
-    }
-
-    setCycles((state) => [...state, newCycle])
-    setActiveCycleId(id)
-    setSecondsPassedAmount(0)
+    createNewCycle(data)
     reset()
   }
 
   const task = watch('task')
   const isSubmitDisabled = !task
 
-  const remainingSecondsAmount = activeCycle
-    ? activeCycle.minutesAmount * 60 - secondsPassedAmount
-    : 0
-  const minutesAmount = Math.floor(remainingSecondsAmount / 60)
-  const secondsAmount = remainingSecondsAmount % 60
-  const minutesStr = String(minutesAmount).padStart(2, '0')
-  const secondsStr = String(secondsAmount).padStart(2, '0')
-
-  function handleInterruptCycle() {
-    setCycles(
-      cycles.map((cycle) => {
-        if (cycle.id === activeCycleId) {
-          return { ...cycle, interruptedDate: new Date() }
-        } else {
-          return cycle
-        }
-      }),
-    )
-
-    setActiveCycleId(null)
-  }
-  useEffect(() => {
-    if (activeCycle) {
-      document.title = `${minutesStr}:${secondsStr}`
-    }
-  }, [minutesStr, secondsStr, activeCycle])
-
-  console.log(cycles)
   return (
     // Main Container
     <div className="flex flex-1 flex-col items-center justify-center px-5">
@@ -114,71 +46,11 @@ export function Home() {
         className="flex w-full max-w-screen-sm flex-col items-center gap-16 sm:gap-12"
         onSubmit={handleSubmit(handleCreateNewCycle)}
       >
-        {/* Inputs Container */}
-        <div className="flex w-full max-w-screen-sm flex-wrap items-center justify-center gap-2 font-bold text-base-200">
-          <label htmlFor="task">Vou trabalhar em</label>
-          <input
-            id="task"
-            className={inputBaseStyles + 'grow'}
-            placeholder="Dê um nome para o seu projeto"
-            list="task-suggestions"
-            {...register('task')}
-          />
-          <datalist id="task-suggestions">
-            <option value="Projeto 1" />
-            <option value="Projeto 2" />
-            <option value="Projeto 3" />
-            <option value="Banana" />
-          </datalist>
-
-          <label htmlFor="minutesAmount">durante</label>
-          <input
-            id="minutesAmount"
-            type="number"
-            className={inputBaseStyles + 'w-16'}
-            placeholder="00"
-            step={5}
-            min={5}
-            max={60}
-            {...register('minutesAmount', { valueAsNumber: true })}
-          />
-
-          <span>minutos.</span>
-        </div>
-
-        {/* Count Down Container */}
-        <div className="flex gap-4 font-mono text-7xl leading-[5rem] text-base-200 sm:text-9xl">
-          <CountDownCharacter character={minutesStr[0]} />
-          <CountDownCharacter character={minutesStr[1]} />
-          <span className="flex w-8 justify-center overflow-hidden py-4 text-primary sm:w-12 sm:py-6">
-            :
-          </span>
-          <CountDownCharacter character={secondsStr[0]} />
-          <CountDownCharacter character={secondsStr[1]} />
-        </div>
-
-        {activeCycle ? (
-          <button
-            type="button"
-            disabled={isSubmitDisabled && !activeCycle}
-            className={buttonBaseStyles + ' bg-danger hover:bg-danger-dark'}
-            onClick={handleInterruptCycle}
-          >
-            <HandPalm />
-            Interromper
-          </button>
-        ) : (
-          <button
-            type="submit"
-            disabled={isSubmitDisabled && !activeCycle}
-            className={
-              buttonBaseStyles + ' bg-primary enabled:hover:bg-primary-dark'
-            }
-          >
-            <Play />
-            Começar
-          </button>
-        )}
+        <FormProvider {...newCycleForm}>
+          <FormInputs />
+        </FormProvider>
+        <Display />
+        <Button disabled={isSubmitDisabled} />
       </form>
     </div>
   )
