@@ -3,13 +3,12 @@ import { ptBR } from 'date-fns/locale'
 import { useContext } from 'react'
 
 import { CyclesContext } from '../../contexts/cycle-context'
-import { Status } from './components/status'
 
 const thStyle =
   'bg-base-600 text-left p-4 text-base-200 text-sm leading-[1.6] first:rounded-tl-lg first:pl-6 last:rounded-tr-lg last:pr-6'
 
 const tdStyle =
-  'bg-base-700 border-t-base-800 border-t-4 p-4 text-sm leading-[1.6] first:pl-6 last:pr-6 first:w-[50%]'
+  'bg-base-700 border-t-base-800 border-t-4 p-4 text-sm leading-[1.6] first:pl-6 last:pr-6 first:w-[49%]'
 
 export function History() {
   const { cycles } = useContext(CyclesContext)
@@ -40,15 +39,24 @@ export function History() {
                 </td>
                 <td className={tdStyle}>
                   {cycle.finishedDate && (
-                    <Status color="green">Concluído</Status>
+                    <span className="flex items-center gap-2 leading-3">
+                      <div className="h-2 w-2 rounded-full bg-green-500" />
+                      Concluído
+                    </span>
                   )}
 
                   {cycle.interruptedDate && (
-                    <Status color="red">Interrompido</Status>
+                    <span className="flex items-center gap-2 leading-3">
+                      <div className="h-2 w-2 rounded-full bg-red-500 " />
+                      <span className="">Interrompido</span>
+                    </span>
                   )}
 
                   {!cycle.finishedDate && !cycle.interruptedDate && (
-                    <Status color="yellow">Em andamento</Status>
+                    <span className="flex items-center gap-2 leading-3">
+                      <div className="h-2 w-2 rounded-full bg-yellow-500" />
+                      Em andamento
+                    </span>
                   )}
                 </td>
               </tr>
