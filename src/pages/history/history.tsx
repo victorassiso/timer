@@ -39,21 +39,35 @@ export function History() {
                 </td>
                 <td className={tdStyle}>
                   {cycle.finishedDate && (
+<<<<<<< HEAD
                     <span className="flex items-center gap-2 leading-3">
+=======
+                    <span className="flex items-center gap-2">
+>>>>>>> 8f71c3f51ac93e6b21f815fd5a23672bfc0d4eb3
                       <div className="h-2 w-2 rounded-full bg-green-500" />
                       Concluído
                     </span>
                   )}
 
                   {cycle.interruptedDate && (
+<<<<<<< HEAD
                     <span className="flex items-center gap-2 leading-3">
                       <div className="h-2 w-2 rounded-full bg-red-500 " />
                       <span className="">Interrompido</span>
+=======
+                    <span className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-red-500" />
+                      Interrompido
+>>>>>>> 8f71c3f51ac93e6b21f815fd5a23672bfc0d4eb3
                     </span>
                   )}
 
                   {!cycle.finishedDate && !cycle.interruptedDate && (
+<<<<<<< HEAD
                     <span className="flex items-center gap-2 leading-3">
+=======
+                    <span className="flex items-center gap-2">
+>>>>>>> 8f71c3f51ac93e6b21f815fd5a23672bfc0d4eb3
                       <div className="h-2 w-2 rounded-full bg-yellow-500" />
                       Em andamento
                     </span>
