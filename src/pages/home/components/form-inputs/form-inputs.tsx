@@ -29,7 +29,7 @@ export function FormInputs() {
         className={inputBaseStyles + 'w-16'}
         placeholder="00"
         step={5}
-        min={1}
+        min={5}
         max={60}
         {...register('minutesAmount', { valueAsNumber: true })}
       />
