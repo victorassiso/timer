@@ -55,9 +55,7 @@ export function CyclesContextProvider({
 
         if (secondsDiff < totalSecondsAmount) {
           setSecondsPassedAmount(secondsDiff)
-          console.log(secondsDiff)
         } else {
-          console.log(secondsDiff)
           setCycles((state) =>
             state.map((cycle) => {
               if (cycle.id === activeCycleId) {
