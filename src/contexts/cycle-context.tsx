@@ -12,6 +12,7 @@ interface ICycle {
   minutesAmount: number
   startDate: Date
   interruptedDate?: Date
+  finishedDate?: Date
 }
 
 interface ICyclesContext {
@@ -39,20 +40,42 @@ export function CyclesContextProvider({
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
+  const totalSecondsAmount = activeCycle ? activeCycle.minutesAmount * 60 : 0
+
+  /* Update or Stop Counter */
   useEffect(() => {
     let interval: number
 
     if (activeCycle) {
       interval = setInterval(() => {
-        setSecondsPassedAmount(
-          differenceInSeconds(new Date(), activeCycle.startDate),
+        const secondsDiff = differenceInSeconds(
+          new Date(),
+          activeCycle.startDate,
         )
+
+        if (secondsDiff < totalSecondsAmount) {
+          setSecondsPassedAmount(secondsDiff)
+          console.log(secondsDiff)
+        } else {
+          console.log(secondsDiff)
+          setCycles((state) =>
+            state.map((cycle) => {
+              if (cycle.id === activeCycleId) {
+                return { ...cycle, finishedDate: new Date() }
+              } else {
+                return cycle
+              }
+            }),
+          )
+          setActiveCycleId(null)
+          clearInterval(interval)
+        }
       }, 1000)
     }
     return () => {
       clearInterval(interval)
     }
-  }, [activeCycle])
+  }, [activeCycle, activeCycleId, totalSecondsAmount])
 
   function createNewCycle(data: CreateCycleProps) {
     const id = String(new Date().getTime())

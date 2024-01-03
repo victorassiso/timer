@@ -10,12 +10,12 @@ interface ButtonProps {
   disabled: boolean
 }
 export function Button({ disabled }: ButtonProps) {
-  const { activeCycle, activeCycleId, setActiveCycleId, cycles, setCycles } =
+  const { activeCycle, activeCycleId, setActiveCycleId, setCycles } =
     useContext(CyclesContext)
 
   function handleInterruptCycle() {
-    setCycles(
-      cycles.map((cycle) => {
+    setCycles((state) =>
+      state.map((cycle) => {
         if (cycle.id === activeCycleId) {
           return { ...cycle, interruptedDate: new Date() }
         } else {
