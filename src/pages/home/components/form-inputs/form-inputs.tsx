@@ -5,6 +5,7 @@ const inputBaseStyles =
 
 export function FormInputs() {
   const { register } = useFormContext()
+
   return (
     <div className="flex w-full max-w-screen-sm flex-wrap items-center justify-center gap-2 font-bold text-base-200">
       <label htmlFor="task">Vou trabalhar em</label>

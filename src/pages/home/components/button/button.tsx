@@ -10,22 +10,7 @@ interface ButtonProps {
   disabled: boolean
 }
 export function Button({ disabled }: ButtonProps) {
-  const { activeCycle, activeCycleId, setActiveCycleId, setCycles } =
-    useContext(CyclesContext)
-
-  function handleInterruptCycle() {
-    setCycles((state) =>
-      state.map((cycle) => {
-        if (cycle.id === activeCycleId) {
-          return { ...cycle, interruptedDate: new Date() }
-        } else {
-          return cycle
-        }
-      }),
-    )
-
-    setActiveCycleId(null)
-  }
+  const { activeCycle, interruptCycle } = useContext(CyclesContext)
 
   return (
     <>
@@ -33,7 +18,7 @@ export function Button({ disabled }: ButtonProps) {
         <button
           type="button"
           className={buttonBaseStyles + ' bg-danger hover:bg-danger-dark'}
-          onClick={handleInterruptCycle}
+          onClick={interruptCycle}
         >
           <HandPalm />
           Interromper

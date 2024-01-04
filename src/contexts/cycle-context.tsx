@@ -1,5 +1,4 @@
-import { differenceInSeconds } from 'date-fns'
-import { createContext, ReactNode, useEffect, useState } from 'react'
+import { createContext, ReactNode, useState } from 'react'
 
 interface CreateCycleProps {
   task: string
@@ -17,12 +16,12 @@ interface ICycle {
 
 interface ICyclesContext {
   cycles: ICycle[]
-  setCycles: React.Dispatch<React.SetStateAction<ICycle[]>>
   activeCycle: ICycle | undefined
-  activeCycleId: string | null
-  setActiveCycleId: React.Dispatch<React.SetStateAction<string | null>>
   secondsPassedAmount: number
-  createNewCycle: (data: CreateCycleProps) => void
+  interruptCycle: () => void
+  createCycle: (data: CreateCycleProps) => void
+  markCurrentCycleAsFinished: () => void
+  setSecondsPassedAmountHandler: (seconds: number) => void
 }
 
 export const CyclesContext = createContext({} as ICyclesContext)
@@ -40,42 +39,38 @@ export function CyclesContextProvider({
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
-  const totalSecondsAmount = activeCycle ? activeCycle.minutesAmount * 60 : 0
-
-  /* Update or Stop Counter */
-  useEffect(() => {
-    let interval: number
-
-    if (activeCycle) {
-      interval = setInterval(() => {
-        const secondsDiff = differenceInSeconds(
-          new Date(),
-          activeCycle.startDate,
-        )
-
-        if (secondsDiff < totalSecondsAmount) {
-          setSecondsPassedAmount(secondsDiff)
+  function markCurrentCycleAsFinished() {
+    setCycles((state) =>
+      state.map((cycle) => {
+        if (cycle.id === activeCycleId) {
+          return { ...cycle, finishedDate: new Date() }
         } else {
-          setCycles((state) =>
-            state.map((cycle) => {
-              if (cycle.id === activeCycleId) {
-                return { ...cycle, finishedDate: new Date() }
-              } else {
-                return cycle
-              }
-            }),
-          )
-          setActiveCycleId(null)
-          clearInterval(interval)
+          return cycle
         }
-      }, 1000)
-    }
-    return () => {
-      clearInterval(interval)
-    }
-  }, [activeCycle, activeCycleId, totalSecondsAmount])
+      }),
+    )
+    setActiveCycleId(null)
+  }
 
-  function createNewCycle(data: CreateCycleProps) {
+  function interruptCycle() {
+    setCycles((state) =>
+      state.map((cycle) => {
+        if (cycle.id === activeCycleId) {
+          return { ...cycle, interruptedDate: new Date() }
+        } else {
+          return cycle
+        }
+      }),
+    )
+
+    setActiveCycleId(null)
+  }
+
+  function setSecondsPassedAmountHandler(seconds: number) {
+    setSecondsPassedAmount(seconds)
+  }
+
+  function createCycle(data: CreateCycleProps) {
     const id = String(new Date().getTime())
 
     const newCycle: ICycle = {
@@ -94,12 +89,12 @@ export function CyclesContextProvider({
     <CyclesContext.Provider
       value={{
         activeCycle,
-        activeCycleId,
-        setActiveCycleId,
         cycles,
-        setCycles,
         secondsPassedAmount,
-        createNewCycle,
+        createCycle,
+        interruptCycle,
+        markCurrentCycleAsFinished,
+        setSecondsPassedAmountHandler,
       }}
     >
       {children}
