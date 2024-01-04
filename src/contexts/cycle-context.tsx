@@ -138,6 +138,8 @@ export function CyclesContextProvider({
   function updatePageTitle() {
     if (activeCycle) {
       document.title = `${minutesStr}:${secondsStr}`
+    } else {
+      document.title = 'Timer'
     }
   }
 
