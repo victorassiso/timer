@@ -1,30 +1,20 @@
-# React + TypeScript + Vite
+# Pomodoro Timer App - React Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Pomodoro app designed to help users manage their work cycles efficiently. The app features a timer with a countdown display and maintains a history of "projects", representing cycles that the user has initiated. Users can start, interrupt, or allow a cycle to complete by waiting for the countdown to finish. Each cycle, or "project", can be customized with a name and a specified duration in minutes. The app includes a history page where users can review past projects, displaying details such as date and status (completed, interrupted, or in progress).
 
-Currently, two official plugins are available:
+## Available On
+https://victorassiso.github.io/timer
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+* Pomodoro Timer
+* Customizable cycle names
+* Cycle Controls
+* History Page
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Technologies Used
+* Vite
+* React
+* React Hook Form
+* React Router DOM
+* React Context
+* React Reducer
