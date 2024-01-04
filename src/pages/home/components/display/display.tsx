@@ -9,7 +9,7 @@ export function Display() {
     activeCycle,
     secondsPassedAmount,
     setSecondsPassedAmountHandler,
-    markCurrentCycleAsFinished,
+    wrapUpCurrentCycle,
   } = useContext(CyclesContext)
 
   const totalSecondsAmount = activeCycle ? activeCycle.minutesAmount * 60 : 0
@@ -28,7 +28,7 @@ export function Display() {
         if (secondsDiff < totalSecondsAmount) {
           setSecondsPassedAmountHandler(secondsDiff)
         } else {
-          markCurrentCycleAsFinished()
+          wrapUpCurrentCycle()
           clearInterval(interval)
           setSecondsPassedAmountHandler(0)
         }
@@ -40,7 +40,7 @@ export function Display() {
   }, [
     activeCycle,
     totalSecondsAmount,
-    markCurrentCycleAsFinished,
+    wrapUpCurrentCycle,
     setSecondsPassedAmountHandler,
   ])
 
