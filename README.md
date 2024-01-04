@@ -6,10 +6,11 @@ A Pomodoro app designed to help users manage their work cycles efficiently. The 
 https://victorassiso.github.io/timer
 
 ## Features
-* Pomodoro Timer
+* Pomodoro timer
 * Customizable cycle names
-* Cycle Controls
-* History Page
+* Cycle controls
+* History page
+* Data persistence (localStorage)
 
 ## Technologies Used
 * Vite
@@ -18,3 +19,4 @@ https://victorassiso.github.io/timer
 * React Router DOM
 * React Context
 * React Reducer
+* localStorage
