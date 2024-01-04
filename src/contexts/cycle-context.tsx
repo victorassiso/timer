@@ -21,11 +21,11 @@ interface CreateCycleProps {
 interface ICyclesContext {
   cycles: ICycle[]
   activeCycle: ICycle | undefined
-  secondsPassedAmount: number
+  minutesStr: string
+  secondsStr: string
   interruptCycle: () => void
   createCycle: (data: CreateCycleProps) => void
   wrapUpCurrentCycle: () => void
-  setSecondsPassedAmountHandler: (seconds: number) => void
 }
 
 export const CyclesContext = createContext({} as ICyclesContext)
@@ -56,6 +56,10 @@ export function CyclesContextProvider({
     },
   )
 
+  useEffect(setSecondsPassedAmountHandler, [setSecondsPassedAmountHandler])
+  useEffect(saveToLocalStorage, [cyclesState])
+  useEffect(updatePageTitle, [updatePageTitle])
+
   const { cycles, activeCycleId } = cyclesState as CyclesState
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
@@ -66,11 +70,11 @@ export function CyclesContextProvider({
     return 0
   })
 
-  useEffect(() => {
+  function saveToLocalStorage() {
     const stateJSON = JSON.stringify(cyclesState)
 
     localStorage.setItem('@timer:cycles-state-1.0.0', stateJSON)
-  }, [cyclesState])
+  }
 
   function wrapUpCurrentCycle() {
     dispatch(wrapUpCurrentCycleAction())
@@ -80,8 +84,28 @@ export function CyclesContextProvider({
     dispatch(interruptCycleAction())
   }
 
-  function setSecondsPassedAmountHandler(seconds: number) {
-    setSecondsPassedAmount(seconds)
+  function setSecondsPassedAmountHandler() {
+    let interval: number
+
+    if (activeCycle) {
+      interval = setInterval(() => {
+        const secondsDiff = differenceInSeconds(
+          new Date(),
+          activeCycle.startDate,
+        )
+
+        if (secondsDiff < totalSecondsAmount) {
+          setSecondsPassedAmount(secondsDiff)
+        } else {
+          wrapUpCurrentCycle()
+          clearInterval(interval)
+          setSecondsPassedAmount(0)
+        }
+      }, 1000)
+    }
+    return () => {
+      clearInterval(interval)
+    }
   }
 
   function createCycle(data: CreateCycleProps) {
@@ -99,16 +123,34 @@ export function CyclesContextProvider({
     setSecondsPassedAmount(0)
   }
 
+  const totalSecondsAmount = activeCycle ? activeCycle.minutesAmount * 60 : 0
+
+  const remainingSecondsAmount = activeCycle
+    ? activeCycle.minutesAmount * 60 - secondsPassedAmount
+    : 0
+
+  const minutesAmount = Math.floor(remainingSecondsAmount / 60)
+  const secondsAmount = remainingSecondsAmount % 60
+
+  const minutesStr = String(minutesAmount).padStart(2, '0')
+  const secondsStr = String(secondsAmount).padStart(2, '0')
+
+  function updatePageTitle() {
+    if (activeCycle) {
+      document.title = `${minutesStr}:${secondsStr}`
+    }
+  }
+
   return (
     <CyclesContext.Provider
       value={{
         activeCycle,
         cycles,
-        secondsPassedAmount,
+        minutesStr,
+        secondsStr,
         createCycle,
         interruptCycle,
         wrapUpCurrentCycle,
-        setSecondsPassedAmountHandler,
       }}
     >
       {children}
