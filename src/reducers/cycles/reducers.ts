@@ -9,12 +9,27 @@ export interface ICycle {
   finishedDate?: Date
 }
 
-interface CyclesState {
+export interface CyclesState {
   cycles: ICycle[]
   activeCycleId: string | null
 }
 
-export function cyclesReducer(state: CyclesState, action: any) {
+export interface CreateCycleActionPayload {
+  newCycle: ICycle
+}
+
+export interface CreateCycleAction {
+  type: ActionTypes.CREATE_NEW_CYCLE
+  payload: CreateCycleActionPayload
+}
+
+export interface OtherCycleAction {
+  type: Exclude<ActionTypes, ActionTypes.CREATE_NEW_CYCLE>
+}
+
+export type CyclesAction = CreateCycleAction | OtherCycleAction
+
+export function cyclesReducer(state: CyclesState, action: CyclesAction) {
   switch (action.type) {
     case ActionTypes.CREATE_NEW_CYCLE:
       return {

@@ -1,4 +1,4 @@
-import { ICycle } from './reducers'
+import { CreateCycleAction, ICycle, OtherCycleAction } from './reducers'
 
 export enum ActionTypes {
   CREATE_NEW_CYCLE = 'CREATE_NEW_CYCLE',
@@ -6,7 +6,7 @@ export enum ActionTypes {
   WRAP_UP_CURRENT_CYCLE = 'WRAP_UP_CURRENT_CYCLE',
 }
 
-export function createCycleAction(newCycle: ICycle) {
+export function createCycleAction(newCycle: ICycle): CreateCycleAction {
   return {
     type: ActionTypes.CREATE_NEW_CYCLE,
     payload: {
@@ -15,13 +15,13 @@ export function createCycleAction(newCycle: ICycle) {
   }
 }
 
-export function interruptCycleAction() {
+export function interruptCycleAction(): OtherCycleAction {
   return {
     type: ActionTypes.INTERRUPT_CURRENT_CYCLE,
   }
 }
 
-export function wrapUpCurrentCycleAction() {
+export function wrapUpCurrentCycleAction(): OtherCycleAction {
   return {
     type: ActionTypes.WRAP_UP_CURRENT_CYCLE,
   }
